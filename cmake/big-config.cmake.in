@@ -1,0 +1,10 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+# Find required dependencies (none for now, but could add pthread etc. here)
+
+# Include the targets file
+include("${CMAKE_CURRENT_LIST_DIR}/bigTargets.cmake")
+
+check_required_components(big)
