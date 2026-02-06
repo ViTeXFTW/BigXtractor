@@ -106,29 +106,20 @@ if(BUILD_TESTING)
   enable_testing()
   find_package(GTest QUIET)
 
-  if(GTest_FOUND)
-    set(TEST_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
-    file(GLOB TEST_SOURCES "${TEST_SOURCE_DIR}/*.cpp")
-
-    if(TEST_SOURCES)
-      add_executable(big_tests ${TEST_SOURCES})
-      target_link_libraries(big_tests
-        PRIVATE
-          big::big
-          gtest
-          gtest_main
-      )
-
-      if(MSVC)
-        target_compile_options(big_tests PRIVATE /W4 /permissive-)
-      else()
-        target_compile_options(big_tests PRIVATE -Wall -Wextra -Wpedantic -Werror)
-      endif()
-
-      add_test(NAME big_tests COMMAND big_tests)
+  # If GTest not found, use the submodule
+  if(NOT GTest_FOUND)
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/lib/googletest/CMakeLists.txt")
+      message(STATUS "Using GTest from git submodule")
+      set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+      add_subdirectory(lib/googletest EXCLUDE_FROM_ALL)
+      set(GTEST_FOUND ON)
     else()
-      message(STATUS "No test sources found in ${TEST_SOURCE_DIR}")
+      message(WARNING "GTest not found and submodule not available. Run: git submodule update --init --recursive")
     endif()
+  endif()
+
+  if(GTEST_FOUND OR GTest_FOUND)
+    add_subdirectory(tests)
   else()
     message(STATUS "GTest not found - skipping big library tests")
   endif()
