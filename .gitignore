@@ -29,3 +29,9 @@ compile_commands.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Game Files
+*.[wW]3[dD]
+
+# Large test data (not in git)
+tests/test03/
