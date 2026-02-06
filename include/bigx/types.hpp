@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace big {
+namespace bigx {
 
 // File entry in the BIG archive
 struct FileEntry {
@@ -30,4 +30,4 @@ public:
   explicit ParseError(const std::string &msg) : std::runtime_error(msg) {}
 };
 
-} // namespace big
+} // namespace bigx

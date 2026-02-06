@@ -8,7 +8,7 @@
 #include <bigx/mmap.hpp>
 #include <bigx/reader.hpp>
 
-namespace big {
+namespace bigx {
 
 std::optional<Reader> Reader::open(const std::filesystem::path &path, std::string *outError) {
   Reader reader;
@@ -255,4 +255,4 @@ std::string Reader::normalizePath(const std::string &path) {
   return result;
 }
 
-} // namespace big
+} // namespace bigx

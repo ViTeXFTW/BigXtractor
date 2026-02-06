@@ -13,7 +13,7 @@
 #include <unistd.h>
 #endif
 
-namespace big {
+namespace bigx {
 
 MappedFile::MappedFile() = default;
 
@@ -328,4 +328,4 @@ void MappedFile::cleanup() noexcept {
   writable_ = false;
 }
 
-} // namespace big
+} // namespace bigx

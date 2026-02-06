@@ -8,7 +8,7 @@
 #include <bigx/mmap.hpp>
 #include <bigx/writer.hpp>
 
-namespace big {
+namespace bigx {
 
 bool Writer::addFile(const std::filesystem::path &sourcePath, const std::string &archivePath,
                      std::string *outError) {
@@ -281,4 +281,4 @@ std::string Writer::normalizePath(const std::string &path) {
   return result;
 }
 
-} // namespace big
+} // namespace bigx
