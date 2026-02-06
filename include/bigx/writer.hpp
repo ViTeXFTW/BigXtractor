@@ -47,13 +47,17 @@ public:
   size_t fileCount() const { return pendingFiles_.size(); }
 
 private:
-  // Normalize path for storage (forward slashes, lowercase)
+  // Normalize slashes only (backslashes to forward slashes), preserving case
+  static std::string normalizeSlashes(const std::string &path);
+
+  // Normalize path to lowercase with forward slashes for lookup
   static std::string normalizePath(const std::string &path);
 
   struct PendingFile {
-    std::string archivePath;          // Original path (will be stored as-is)
+    std::string archivePath;          // Normalized path (forward slashes)
     std::filesystem::path sourcePath; // Empty if from memory
-    std::vector<uint8_t> data;        // Valid if from memory
+    std::vector<uint8_t> data;        // File data if from memory
+    bool fromDisk = false;            // True if file should be read from sourcePath
   };
 
   std::vector<PendingFile> pendingFiles_;

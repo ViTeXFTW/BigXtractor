@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <big/big.hpp>
+#include <bigx/big.hpp>
 
 int main(int argc, char *argv[]) {
   if (argc < 2) {

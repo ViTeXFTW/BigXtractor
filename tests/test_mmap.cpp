@@ -4,7 +4,7 @@
 #include <random>
 #include <vector>
 
-#include "mmap.hpp"
+#include <bigx/mmap.hpp>
 
 #include <gtest/gtest.h>
 

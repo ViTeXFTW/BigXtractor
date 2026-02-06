@@ -4,9 +4,9 @@
 #include <fstream>
 #include <unordered_set>
 
-#include <big/endian.hpp>
-#include <big/mmap.hpp>
-#include <big/reader.hpp>
+#include <bigx/endian.hpp>
+#include <bigx/mmap.hpp>
+#include <bigx/reader.hpp>
 
 namespace big {
 
@@ -81,8 +81,8 @@ bool Reader::parse(std::string *outError) {
     offset = betoh32(offset);
     size = betoh32(size);
 
-    // Validate offset and size
-    if (offset + size > fileData.size()) {
+    // Validate offset and size (cast to size_t to prevent uint32_t overflow)
+    if (static_cast<size_t>(offset) + static_cast<size_t>(size) > fileData.size()) {
       if (outError) {
         *outError =
             std::format("File entry {} has invalid offset/size (offset={}, size={}, fileSize={})",
@@ -110,7 +110,7 @@ bool Reader::parse(std::string *outError) {
 
     // Create file entry
     FileEntry entry;
-    entry.path = normalizePath(path);
+    entry.path = normalizeSlashes(path);
     entry.lowercasePath = normalizePath(path);
     entry.offset = offset;
     entry.size = size;
@@ -148,8 +148,10 @@ const FileEntry *Reader::findFile(const std::string &path) const {
 
 bool Reader::extract(const FileEntry &entry, const std::filesystem::path &destPath,
                      std::string *outError) const {
-  auto fileData = getFileView(entry);
-  if (fileData.empty()) {
+  auto archiveData = mappedFile_.data();
+
+  // Validate bounds
+  if (static_cast<size_t>(entry.offset) + static_cast<size_t>(entry.size) > archiveData.size()) {
     if (outError) {
       *outError = std::format("Invalid file bounds for: {}", entry.path);
     }
@@ -159,7 +161,7 @@ bool Reader::extract(const FileEntry &entry, const std::filesystem::path &destPa
   // Create parent directories if needed
   std::filesystem::create_directories(destPath.parent_path());
 
-  // Write file
+  // Write file (handles zero-size files correctly)
   std::ofstream out(destPath, std::ios::binary);
   if (!out) {
     if (outError) {
@@ -168,12 +170,14 @@ bool Reader::extract(const FileEntry &entry, const std::filesystem::path &destPa
     return false;
   }
 
-  out.write(reinterpret_cast<const char *>(fileData.data()), fileData.size());
-  if (!out) {
-    if (outError) {
-      *outError = std::format("Failed to write to output file: {}", destPath.string());
+  if (entry.size > 0) {
+    out.write(reinterpret_cast<const char *>(archiveData.data() + entry.offset), entry.size);
+    if (!out) {
+      if (outError) {
+        *outError = std::format("Failed to write to output file: {}", destPath.string());
+      }
+      return false;
     }
-    return false;
   }
 
   return true;
@@ -181,24 +185,28 @@ bool Reader::extract(const FileEntry &entry, const std::filesystem::path &destPa
 
 std::optional<std::vector<uint8_t>> Reader::extractToMemory(const FileEntry &entry,
                                                             std::string *outError) const {
-  auto fileData = getFileView(entry);
-  if (fileData.empty()) {
+  auto archiveData = mappedFile_.data();
+
+  // Validate bounds
+  if (static_cast<size_t>(entry.offset) + static_cast<size_t>(entry.size) > archiveData.size()) {
     if (outError) {
       *outError = std::format("Invalid file bounds for: {}", entry.path);
     }
     return std::nullopt;
   }
 
-  std::vector<uint8_t> result(fileData.size());
-  std::memcpy(result.data(), fileData.data(), fileData.size());
+  std::vector<uint8_t> result(entry.size);
+  if (entry.size > 0) {
+    std::memcpy(result.data(), archiveData.data() + entry.offset, entry.size);
+  }
   return result;
 }
 
 std::span<const uint8_t> Reader::getFileView(const FileEntry &entry) const {
   auto archiveData = mappedFile_.data();
 
-  // Validate bounds
-  if (entry.offset + entry.size > archiveData.size()) {
+  // Validate bounds (cast to size_t to prevent uint32_t overflow)
+  if (static_cast<size_t>(entry.offset) + static_cast<size_t>(entry.size) > archiveData.size()) {
     return {};
   }
 
@@ -213,6 +221,22 @@ void Reader::close() {
   mappedFile_.close();
   files_.clear();
   lookup_.clear();
+}
+
+std::string Reader::normalizeSlashes(const std::string &path) {
+  std::string result;
+  result.reserve(path.size());
+
+  // Replace backslashes with forward slashes, preserving case
+  for (char c : path) {
+    if (c == '\\') {
+      result += '/';
+    } else {
+      result += c;
+    }
+  }
+
+  return result;
 }
 
 std::string Reader::normalizePath(const std::string &path) {

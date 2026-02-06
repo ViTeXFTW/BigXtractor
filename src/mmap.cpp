@@ -1,6 +1,6 @@
 #include <format>
 
-#include <big/mmap.hpp>
+#include <bigx/mmap.hpp>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -22,8 +22,13 @@ MappedFile::~MappedFile() {
 }
 
 MappedFile::MappedFile(MappedFile &&other) noexcept
-    : fileHandle_(other.fileHandle_), mappingHandle_(other.mappingHandle_), data_(other.data_),
-      size_(other.size_), writable_(other.writable_) {
+    :
+#ifdef _WIN32
+      fileHandle_(other.fileHandle_), mappingHandle_(other.mappingHandle_),
+#else
+      fd_(other.fd_),
+#endif
+      data_(other.data_), size_(other.size_), writable_(other.writable_) {
 #ifdef _WIN32
   other.fileHandle_ = nullptr;
   other.mappingHandle_ = nullptr;

@@ -2,9 +2,9 @@
 #include <format>
 #include <fstream>
 
-#include "endian.hpp"
-#include "reader.hpp"
-#include "writer.hpp"
+#include <bigx/endian.hpp>
+#include <bigx/reader.hpp>
+#include <bigx/writer.hpp>
 
 #include <gtest/gtest.h>
 
@@ -111,8 +111,21 @@ TEST_F(WriterTest, EmptyArchive) {
   std::string error;
 
   fs::path archivePath = tempDir_ / "empty.big";
-  EXPECT_FALSE(writer.write(archivePath, &error));
-  EXPECT_TRUE(error.empty() || error.find("no files") != std::string::npos);
+  ASSERT_TRUE(writer.write(archivePath, &error)) << error;
+
+  // Verify the empty archive has a valid header
+  std::ifstream archiveFile(archivePath, std::ios::binary);
+  char magic[4];
+  archiveFile.read(magic, 4);
+  EXPECT_EQ(std::string(magic, 4), "BIGF");
+
+  uint32_t archiveSize, fileCount, padding;
+  archiveFile.read(reinterpret_cast<char *>(&archiveSize), 4);
+  archiveFile.read(reinterpret_cast<char *>(&fileCount), 4);
+  archiveFile.read(reinterpret_cast<char *>(&padding), 4);
+
+  EXPECT_EQ(big::betoh32(fileCount), 0u);
+  EXPECT_EQ(padding, 0u);
 }
 
 // Test non-existent source file
