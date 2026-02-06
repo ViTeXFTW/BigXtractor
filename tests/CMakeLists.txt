@@ -67,6 +67,7 @@ add_test(NAME writer_tests COMMAND writer_tests)
 add_executable(archive_tests
   test_archive_incomplete_type.cpp
   test_real_archive.cpp
+  test_w3d_archive.cpp
 )
 target_link_libraries(archive_tests
   PRIVATE
