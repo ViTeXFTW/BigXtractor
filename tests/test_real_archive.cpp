@@ -6,7 +6,6 @@
 #include <bigx/reader.hpp>
 #include <gtest/gtest.h>
 
-
 // Fallback if TEST_DATA_DIR is not defined by CMake
 #ifndef TEST_DATA_DIR
 #define TEST_DATA_DIR "tests"
@@ -19,7 +18,7 @@ namespace fs = std::filesystem;
 TEST(RealArchiveTest, ExtractAndVerifyAgainstReference) {
   // Path to the test archive and reference file
   fs::path testDataDir(TEST_DATA_DIR);
-  fs::path testDir = testDataDir / "archive/test01";
+  fs::path testDir = testDataDir / "test01";
   fs::path archivePath = testDir / "FinalBIG1.big";
   fs::path referenceFile = testDir / "simple.txt";
 
@@ -140,6 +139,10 @@ TEST(RealArchiveTest, ExtractToDiskAndVerify) {
   refStream.read(refContent.data(), refSize);
 
   EXPECT_EQ(extractedContent, refContent) << "Extracted file content doesn't match reference";
+
+  // Explicitly close streams before cleanup (required on Windows)
+  extractedStream.close();
+  refStream.close();
 
   // Cleanup
   fs::remove_all(tempDir);
