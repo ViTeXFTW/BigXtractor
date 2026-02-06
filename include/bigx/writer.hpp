@@ -8,7 +8,7 @@
 
 #include "types.hpp"
 
-namespace big {
+namespace bigx {
 
 class Writer {
 public:
@@ -64,4 +64,4 @@ private:
   std::vector<FileEntry> entries_;
 };
 
-} // namespace big
+} // namespace bigx

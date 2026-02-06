@@ -7,7 +7,7 @@ set(TEST_DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 add_executable(mmap_tests test_mmap.cpp)
 target_link_libraries(mmap_tests
   PRIVATE
-    big::big
+    bigx::bigx
     gtest
     gtest_main
 )
@@ -27,7 +27,7 @@ add_test(NAME mmap_tests COMMAND mmap_tests)
 add_executable(reader_tests test_reader.cpp)
 target_link_libraries(reader_tests
   PRIVATE
-    big::big
+    bigx::bigx
     gtest
     gtest_main
 )
@@ -47,7 +47,7 @@ add_test(NAME reader_tests COMMAND reader_tests)
 add_executable(writer_tests test_writer.cpp)
 target_link_libraries(writer_tests
   PRIVATE
-    big::big
+    bigx::bigx
     gtest
     gtest_main
 )
@@ -70,7 +70,7 @@ add_executable(archive_tests
 )
 target_link_libraries(archive_tests
   PRIVATE
-    big::big
+    bigx::bigx
     gtest
     gtest_main
 )

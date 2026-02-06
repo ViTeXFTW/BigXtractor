@@ -28,7 +28,7 @@ TEST(RealArchiveTest, ExtractAndVerifyAgainstReference) {
 
   // Open the archive
   std::string error;
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << "Failed to open archive: " << error;
 
   // List all files in the archive for debugging
@@ -36,7 +36,7 @@ TEST(RealArchiveTest, ExtractAndVerifyAgainstReference) {
   ASSERT_FALSE(files.empty()) << "Archive contains no files";
 
   // Find the simple.txt file in the archive
-  const big::FileEntry *targetFile = nullptr;
+  const bigx::FileEntry *targetFile = nullptr;
   for (const auto &file : files) {
     if (file.path == "simple.txt" || file.path == "Simple.txt" ||
         file.path.find("simple.txt") != std::string::npos) {
@@ -90,11 +90,11 @@ TEST(RealArchiveTest, ExtractToDiskAndVerify) {
   ASSERT_TRUE(fs::exists(referenceFile)) << "Reference file not found: " << referenceFile;
 
   std::string error;
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << "Failed to open archive: " << error;
 
   // Find the file
-  const big::FileEntry *targetFile = nullptr;
+  const bigx::FileEntry *targetFile = nullptr;
   for (const auto &file : reader->files()) {
     if (file.path == "simple.txt" || file.path == "Simple.txt" ||
         file.path.find("simple.txt") != std::string::npos) {
@@ -161,14 +161,14 @@ TEST(RealArchiveTest, ExtractTest02Files) {
   ASSERT_TRUE(fs::exists(referenceFile2)) << "Reference file not found: " << referenceFile2;
 
   std::string error;
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << "Failed to open archive: " << error;
 
   // Verify both files exist in the archive
-  const big::FileEntry *simpleFile = reader->findFile("simple.txt");
+  const bigx::FileEntry *simpleFile = reader->findFile("simple.txt");
   ASSERT_NE(simpleFile, nullptr) << "simple.txt not found in archive";
 
-  const big::FileEntry *docxFile = reader->findFile("complex.docx");
+  const bigx::FileEntry *docxFile = reader->findFile("complex.docx");
   ASSERT_NE(docxFile, nullptr) << "complex.docx not found in archive";
 
   // Extract simple.txt and verify

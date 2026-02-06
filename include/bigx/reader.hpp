@@ -10,7 +10,7 @@
 #include "mmap.hpp"
 #include "types.hpp"
 
-namespace big {
+namespace bigx {
 
 class Reader {
 public:
@@ -72,4 +72,4 @@ private:
   std::unordered_map<std::string, size_t> lookup_; // lowercase path -> index
 };
 
-} // namespace big
+} // namespace bigx

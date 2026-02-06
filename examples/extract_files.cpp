@@ -1,7 +1,7 @@
 #include <filesystem>
 #include <iostream>
 
-#include <bigx/big.hpp>
+#include <bigx/bigx.hpp>
 
 int main(int argc, char *argv[]) {
   if (argc < 3) {
@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
   }
 
   std::string error;
-  auto archive = big::Archive::open(argv[1], &error);
+  auto archive = bigx::Archive::open(argv[1], &error);
 
   if (!archive) {
     std::cerr << "Error: " << error << "\n";
