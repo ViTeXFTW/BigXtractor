@@ -18,14 +18,14 @@ class Writer;
 // High-level archive interface that combines reading and writing capabilities
 class Archive {
 public:
-  Archive() = default;
-  ~Archive() = default;
+  Archive();
+  ~Archive();
 
   // Delete copy, enable move
   Archive(const Archive &) = delete;
   Archive &operator=(const Archive &) = delete;
-  Archive(Archive &&) noexcept = default;
-  Archive &operator=(Archive &&) noexcept = default;
+  Archive(Archive &&) noexcept;
+  Archive &operator=(Archive &&) noexcept;
 
   // Open existing BIG archive for reading
   // Returns std::nullopt on failure, with error message in outError if provided

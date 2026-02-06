@@ -4,6 +4,13 @@
 
 namespace big {
 
+// Special member functions defined here where Reader/Writer are complete types
+// This fixes the incomplete type issue when using std::unique_ptr with forward declarations
+Archive::Archive() = default;
+Archive::~Archive() = default;
+Archive::Archive(Archive &&) noexcept = default;
+Archive &Archive::operator=(Archive &&) noexcept = default;
+
 std::optional<Archive> Archive::open(const std::filesystem::path &path, std::string *outError) {
   auto reader = Reader::open(path, outError);
   if (!reader) {
