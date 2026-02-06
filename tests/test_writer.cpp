@@ -2,9 +2,9 @@
 #include <format>
 #include <fstream>
 
-#include <big/endian.hpp>
-#include <big/reader.hpp>
-#include <big/writer.hpp>
+#include <bigx/endian.hpp>
+#include <bigx/reader.hpp>
+#include <bigx/writer.hpp>
 
 #include <gtest/gtest.h>
 

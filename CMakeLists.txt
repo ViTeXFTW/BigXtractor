@@ -26,7 +26,7 @@ endif()
 
 # Library sources
 file(GLOB_RECURSE LIB_SOURCES "src/*.cpp")
-file(GLOB_RECURSE LIB_HEADERS "include/big/*.hpp")
+file(GLOB_RECURSE LIB_HEADERS "include/bigx/*.hpp")
 
 # Create the library
 add_library(big ${LIB_SOURCES} ${LIB_HEADERS})
@@ -66,7 +66,7 @@ if(INSTALL_STANDALONE)
   )
 
   # Install headers
-  install(DIRECTORY include/big
+  install(DIRECTORY include/bigx
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.hpp"
   )

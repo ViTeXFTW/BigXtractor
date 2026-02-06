@@ -23,12 +23,12 @@ target_link_libraries(your_target PRIVATE big::big)
 ### 3. Include headers in your code
 
 ```cpp
-#include <big/big.hpp>
+#include <bigx/big.hpp>
 
 // Or specific headers:
-// #include <big/archive.hpp>
-// #include <big/reader.hpp>
-// #include <big/writer.hpp>
+// #include <bigx/archive.hpp>
+// #include <bigx/reader.hpp>
+// #include <bigx/writer.hpp>
 ```
 
 ---
@@ -108,7 +108,7 @@ cmake -B build -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
 ## Usage Example
 
 ```cpp
-#include <big/big.hpp>
+#include <bigx/big.hpp>
 
 int main() {
     // Open an archive

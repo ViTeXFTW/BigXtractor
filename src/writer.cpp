@@ -4,9 +4,9 @@
 #include <fstream>
 #include <unordered_set>
 
-#include <big/endian.hpp>
-#include <big/mmap.hpp>
-#include <big/writer.hpp>
+#include <bigx/endian.hpp>
+#include <bigx/mmap.hpp>
+#include <bigx/writer.hpp>
 
 namespace big {
 

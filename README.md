@@ -7,7 +7,7 @@ A modern C++20 library for reading and writing the `.big` file archive format us
 - **Zero-copy file access** - Memory-mapped I/O for efficient handling of large archives
 - **Full read/write support** - Create, read, and modify BIG archives
 - **Cross-platform** - Windows, Linux, macOS
-- **Header-only public API** - Simple integration with `#include <big/big.hpp>`
+- **Header-only public API** - Simple integration with `#include <bigx/big.hpp>`
 - **Case-insensitive file lookup** - Compatible with original game behavior
 - **No external dependencies** - Standard library only (except for testing)
 
@@ -54,7 +54,7 @@ target_link_libraries(mytool PRIVATE big::big)
 
 ```cpp
 // main.cpp
-#include <big/big.hpp>
+#include <bigx/big.hpp>
 
 int main() {
     auto archive = big::Archive::open("myfile.big");
@@ -104,7 +104,7 @@ target_link_libraries(mytool PRIVATE big::big)
 ### Reading an Archive
 
 ```cpp
-#include <big/big.hpp>
+#include <bigx/big.hpp>
 
 // Open archive
 auto archive = big::Archive::open("archive.big");
@@ -135,7 +135,7 @@ if (file) {
 ### Creating an Archive
 
 ```cpp
-#include <big/big.hpp>
+#include <bigx/big.hpp>
 
 auto archive = big::Archive::create();
 
@@ -158,7 +158,7 @@ if (!archive.write("output.big", &error)) {
 For more control, use the `Reader` and `Writer` classes directly:
 
 ```cpp
-#include <big/reader.hpp>
+#include <bigx/reader.hpp>
 
 auto reader = big::Reader::open("archive.big");
 if (reader) {
