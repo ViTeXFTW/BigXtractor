@@ -147,3 +147,61 @@ TEST(RealArchiveTest, ExtractToDiskAndVerify) {
   // Cleanup
   fs::remove_all(tempDir);
 }
+
+// Test with test02 archive (complex.docx and simple.txt)
+TEST(RealArchiveTest, ExtractTest02Files) {
+  fs::path testDataDir(TEST_DATA_DIR);
+  fs::path testDir = testDataDir / "test02";
+  fs::path archivePath = testDir / "FinalBIG1.big";
+  fs::path referenceFile1 = testDir / "simple.txt";
+  fs::path referenceFile2 = testDir / "complex.docx";
+
+  ASSERT_TRUE(fs::exists(archivePath)) << "Archive file not found: " << archivePath;
+  ASSERT_TRUE(fs::exists(referenceFile1)) << "Reference file not found: " << referenceFile1;
+  ASSERT_TRUE(fs::exists(referenceFile2)) << "Reference file not found: " << referenceFile2;
+
+  std::string error;
+  auto reader = big::Reader::open(archivePath, &error);
+  ASSERT_TRUE(reader.has_value()) << "Failed to open archive: " << error;
+
+  // Verify both files exist in the archive
+  const big::FileEntry *simpleFile = reader->findFile("simple.txt");
+  ASSERT_NE(simpleFile, nullptr) << "simple.txt not found in archive";
+
+  const big::FileEntry *docxFile = reader->findFile("complex.docx");
+  ASSERT_NE(docxFile, nullptr) << "complex.docx not found in archive";
+
+  // Extract simple.txt and verify
+  auto simpleData = reader->extractToMemory(*simpleFile, &error);
+  ASSERT_TRUE(simpleData.has_value()) << "Failed to extract simple.txt: " << error;
+
+  std::ifstream refStream1(referenceFile1, std::ios::binary);
+  ASSERT_TRUE(refStream1.is_open()) << "Failed to open reference file: " << referenceFile1;
+
+  refStream1.seekg(0, std::ios::end);
+  size_t refSize1 = refStream1.tellg();
+  refStream1.seekg(0, std::ios::beg);
+
+  std::vector<uint8_t> refData1(refSize1);
+  refStream1.read(reinterpret_cast<char *>(refData1.data()), refSize1);
+
+  EXPECT_EQ(simpleData->size(), refData1.size());
+  EXPECT_TRUE(std::equal(simpleData->begin(), simpleData->end(), refData1.begin()));
+
+  // Extract complex.docx and verify
+  auto docxData = reader->extractToMemory(*docxFile, &error);
+  ASSERT_TRUE(docxData.has_value()) << "Failed to extract complex.docx: " << error;
+
+  std::ifstream refStream2(referenceFile2, std::ios::binary);
+  ASSERT_TRUE(refStream2.is_open()) << "Failed to open reference file: " << referenceFile2;
+
+  refStream2.seekg(0, std::ios::end);
+  size_t refSize2 = refStream2.tellg();
+  refStream2.seekg(0, std::ios::beg);
+
+  std::vector<uint8_t> refData2(refSize2);
+  refStream2.read(reinterpret_cast<char *>(refData2.data()), refSize2);
+
+  EXPECT_EQ(docxData->size(), refData2.size());
+  EXPECT_TRUE(std::equal(docxData->begin(), docxData->end(), refData2.begin()));
+}
