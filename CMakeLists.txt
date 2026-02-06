@@ -41,19 +41,14 @@ target_include_directories(big
     $<INSTALL_INTERFACE:include>
 )
 
-# Compiler-specific flags
-if(MSVC)
-  target_compile_options(big PUBLIC /W4 /permissive-)
-else()
-  target_compile_options(big PUBLIC -Wall -Wextra -Wpedantic -Werror)
-endif()
+# Require C++20 for this library and its consumers
+target_compile_features(big PUBLIC cxx_std_20)
 
-# Platform-specific linking
-if(WIN32)
-  # Windows doesn't need additional libraries for memory-mapped files
-elseif(UNIX AND NOT APPLE)
-  # Linux may need pthread
-  target_link_libraries(big PUBLIC pthread)
+# Compiler-specific flags (PRIVATE so they don't propagate to consuming projects)
+if(MSVC)
+  target_compile_options(big PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(big PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
 
 # ============================================================

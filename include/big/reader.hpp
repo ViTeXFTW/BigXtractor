@@ -61,6 +61,9 @@ public:
 private:
   bool parse(std::string *outError);
 
+  // Normalize slashes only (backslashes to forward slashes), preserving case
+  static std::string normalizeSlashes(const std::string &path);
+
   // Normalize path to lowercase with forward slashes for lookup
   static std::string normalizePath(const std::string &path);
 

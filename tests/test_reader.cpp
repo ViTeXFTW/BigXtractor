@@ -3,8 +3,8 @@
 #include <fstream>
 #include <vector>
 
-#include "endian.hpp"
-#include "reader.hpp"
+#include <big/endian.hpp>
+#include <big/reader.hpp>
 
 #include <gtest/gtest.h>
 
