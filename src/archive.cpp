@@ -2,7 +2,7 @@
 #include <bigx/reader.hpp>
 #include <bigx/writer.hpp>
 
-namespace big {
+namespace bigx {
 
 // Special member functions defined here where Reader/Writer are complete types
 // This fixes the incomplete type issue when using std::unique_ptr with forward declarations
@@ -128,4 +128,4 @@ void Archive::clear() {
   }
 }
 
-} // namespace big
+} // namespace bigx

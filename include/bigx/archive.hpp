@@ -9,7 +9,7 @@
 
 #include "types.hpp"
 
-namespace big {
+namespace bigx {
 
 // Forward declarations
 class Reader;
@@ -86,4 +86,4 @@ private:
   std::unique_ptr<Writer> writer_;
 };
 
-} // namespace big
+} // namespace bigx

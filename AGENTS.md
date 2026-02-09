@@ -10,19 +10,19 @@ This is a C++20 library for reading/writing the `.big` archive format used by Co
 
 ```bash
 # Basic build
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build
+cmake -B build/release -DCMAKE_BUILD_TYPE=Release
+cmake --build build/release
 
 # Build with tests
-cmake -B build -DBUILD_TESTING=ON
-cmake --build build
+cmake -B build/test -DBUILD_TESTING=ON
+cmake --build build/test
 
 # Run tests
 ctest --test-dir build
 
 # Build with examples
-cmake -B build -DBUILD_EXAMPLES=ON
-cmake --build build
+cmake -B build/examples -DBUILD_EXAMPLES=ON
+cmake --build build/examples
 
 # Using CMake presets (configured for Ninja + clang)
 cmake --preset release

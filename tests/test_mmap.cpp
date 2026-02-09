@@ -39,7 +39,7 @@ TEST_F(MappedFileTest, OpenRead) {
   std::vector<uint8_t> content = {'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd'};
   fs::path filePath = createTestFile("test_read.bin", content);
 
-  big::MappedFile mappedFile;
+  bigx::MappedFile mappedFile;
   std::string error;
   ASSERT_TRUE(mappedFile.openRead(filePath, &error)) << error;
   EXPECT_TRUE(mappedFile.isOpen());
@@ -58,7 +58,7 @@ TEST_F(MappedFileTest, OpenRead) {
 
 // Test opening non-existent file
 TEST_F(MappedFileTest, OpenNonExistent) {
-  big::MappedFile mappedFile;
+  bigx::MappedFile mappedFile;
   std::string error;
   fs::path filePath = tempDir_ / "does_not_exist.bin";
 
@@ -72,7 +72,7 @@ TEST_F(MappedFileTest, OpenEmptyFile) {
   fs::path filePath = tempDir_ / "empty.bin";
   std::ofstream(filePath).close(); // Create empty file
 
-  big::MappedFile mappedFile;
+  bigx::MappedFile mappedFile;
   std::string error;
 
   EXPECT_FALSE(mappedFile.openRead(filePath, &error));
@@ -84,7 +84,7 @@ TEST_F(MappedFileTest, OpenWrite) {
   fs::path filePath = tempDir_ / "test_write.bin";
   size_t fileSize = 1024;
 
-  big::MappedFile mappedFile;
+  bigx::MappedFile mappedFile;
   std::string error;
   ASSERT_TRUE(mappedFile.openWrite(filePath, fileSize, &error)) << error;
   EXPECT_TRUE(mappedFile.isOpen());
@@ -114,7 +114,7 @@ TEST_F(MappedFileTest, OpenWrite) {
 TEST_F(MappedFileTest, OpenWriteZeroSize) {
   fs::path filePath = tempDir_ / "zero_size.bin";
 
-  big::MappedFile mappedFile;
+  bigx::MappedFile mappedFile;
   std::string error;
 
   EXPECT_FALSE(mappedFile.openWrite(filePath, 0, &error));
@@ -126,12 +126,12 @@ TEST_F(MappedFileTest, MoveConstruction) {
   std::vector<uint8_t> content = {1, 2, 3, 4, 5};
   fs::path filePath = createTestFile("test_move.bin", content);
 
-  big::MappedFile mappedFile1;
+  bigx::MappedFile mappedFile1;
   std::string error;
   ASSERT_TRUE(mappedFile1.openRead(filePath, &error)) << error;
 
   // Move construct
-  big::MappedFile mappedFile2(std::move(mappedFile1));
+  bigx::MappedFile mappedFile2(std::move(mappedFile1));
 
   EXPECT_FALSE(mappedFile1.isOpen());
   EXPECT_TRUE(mappedFile2.isOpen());
@@ -149,8 +149,8 @@ TEST_F(MappedFileTest, MoveAssignment) {
   fs::path filePath1 = createTestFile("test_move1.bin", content1);
   fs::path filePath2 = createTestFile("test_move2.bin", content2);
 
-  big::MappedFile mappedFile1;
-  big::MappedFile mappedFile2;
+  bigx::MappedFile mappedFile1;
+  bigx::MappedFile mappedFile2;
   std::string error;
 
   ASSERT_TRUE(mappedFile1.openRead(filePath1, &error)) << error;
@@ -181,7 +181,7 @@ TEST_F(MappedFileTest, LargeFile) {
 
   fs::path filePath = createTestFile("large.bin", content);
 
-  big::MappedFile mappedFile;
+  bigx::MappedFile mappedFile;
   std::string error;
   ASSERT_TRUE(mappedFile.openRead(filePath, &error)) << error;
 

@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <span>
 
-namespace big {
+namespace bigx {
 
 // RAII wrapper for memory-mapped files
 // Supports both read-only and read-write modes
@@ -59,4 +59,4 @@ private:
   bool writable_ = false;
 };
 
-} // namespace big
+} // namespace bigx
