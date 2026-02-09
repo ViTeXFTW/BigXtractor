@@ -2,9 +2,8 @@
 
 #include <bit>
 #include <cstdint>
-#include <cstring>
 
-namespace big {
+namespace bigx {
 
 // C++20-compatible byteswap (C++23 has std::byteswap)
 namespace detail {
@@ -81,4 +80,4 @@ inline constexpr uint64_t htobe64(uint64_t value) noexcept {
   return value;
 }
 
-} // namespace big
+} // namespace bigx

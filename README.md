@@ -1,4 +1,4 @@
-# BIG Archive Library
+# BIGX Archive Library
 
 A modern C++20 library for reading and writing the `.big` file archive format used by Command & Conquer Generals and other Westwood Studios games.
 
@@ -7,7 +7,7 @@ A modern C++20 library for reading and writing the `.big` file archive format us
 - **Zero-copy file access** - Memory-mapped I/O for efficient handling of large archives
 - **Full read/write support** - Create, read, and modify BIG archives
 - **Cross-platform** - Windows, Linux, macOS
-- **Header-only public API** - Simple integration with `#include <bigx/big.hpp>`
+- **Header-only public API** - Simple integration with `#include <bigx/bigx.hpp>`
 - **Case-insensitive file lookup** - Compatible with original game behavior
 - **No external dependencies** - Standard library only (except for testing)
 
@@ -42,61 +42,37 @@ cmake --install build
 
 ## Usage in Other Projects
 
-### Option 1: Using find_package (after installation)
-
-```cmake
-# CMakeLists.txt
-find_package(big REQUIRED)
-
-add_executable(mytool main.cpp)
-target_link_libraries(mytool PRIVATE big::big)
-```
-
-```cpp
-// main.cpp
-#include <bigx/big.hpp>
-
-int main() {
-    auto archive = big::Archive::open("myfile.big");
-    if (archive) {
-        for (const auto& file : archive->files()) {
-            std::cout << file.path << "\n";
-        }
-    }
-}
-```
-
-### Option 2: As a subdirectory
+### Option 1: As a subdirectory
 
 ```cmake
 # Add as subdirectory
-add_subdirectory(external/big-lib)
+add_subdirectory(external/BigXtractor)
 
 # Link against the library
-target_link_libraries(mytool PRIVATE big::big)
+target_link_libraries(mytool PRIVATE bigx::bigx)
 ```
 
-### Option 3: Git submodule
+### Option 2: Git submodule
 
 ```bash
-git submodule add https://github.com/yourusername/big-lib.git external/big-lib
+git submodule add https://github.com/ViTeXFTW/BigXtractor.git external/BigXtractor
 git submodule update --init --recursive
 ```
 
-Then use Option 2 above.
+Then use Option 1 above.
 
-### Option 4: FetchContent (CMake 3.14+)
+### Option 3: FetchContent (CMake 3.14+)
 
 ```cmake
 include(FetchContent)
 FetchContent_Declare(
-  big
-  GIT_REPOSITORY https://github.com/yourusername/big-lib.git
+  bigx
+  GIT_REPOSITORY https://github.com/ViTeXFTW/BigXtractor.git
   GIT_TAG main
 )
-FetchContent_MakeAvailable(big)
+FetchContent_MakeAvailable(bigx)
 
-target_link_libraries(mytool PRIVATE big::big)
+target_link_libraries(mytool PRIVATE bigx::bigx)
 ```
 
 ## API Examples
@@ -104,10 +80,10 @@ target_link_libraries(mytool PRIVATE big::big)
 ### Reading an Archive
 
 ```cpp
-#include <bigx/big.hpp>
+#include <bigx/bigx.hpp>
 
 // Open archive
-auto archive = big::Archive::open("archive.big");
+auto archive = bigx::Archive::open("archive.big");
 if (!archive) {
     std::cerr << "Failed to open archive\n";
     return 1;
@@ -135,9 +111,9 @@ if (file) {
 ### Creating an Archive
 
 ```cpp
-#include <bigx/big.hpp>
+#include <bigx/bigx.hpp>
 
-auto archive = big::Archive::create();
+auto archive = bigx::Archive::create();
 
 // Add files from disk
 archive.addFile("source.txt", "data/source.txt");
@@ -160,7 +136,7 @@ For more control, use the `Reader` and `Writer` classes directly:
 ```cpp
 #include <bigx/reader.hpp>
 
-auto reader = big::Reader::open("archive.big");
+auto reader = bigx::Reader::open("archive.big");
 if (reader) {
     // Get zero-copty view of a file
     const auto* file = reader->findFile("path/file.txt");
@@ -186,13 +162,8 @@ File Entries (starting at 0x10):
 
 ## License
 
-MIT
+[LICENSE](LICENSE)
 
 ## Contributing
 
-Contributions are welcome! Please ensure tests pass before submitting a PR.
-
-## References
-
-- Original implementation: [Generals Game Code](https://github.com/TheSuperHackers/GeneralsGameCode)
-- W3D Viewer: [VulkanW3DViewer](https://github.com/vitexftw/VulkanW3DViewer)
+Contributions are welcome! Please ensure tests pass before submitting a PR

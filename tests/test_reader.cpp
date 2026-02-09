@@ -54,8 +54,8 @@ protected:
     uint32_t totalSize = headerSize + static_cast<uint32_t>(directorySize + fileDataSize);
 
     // Convert to big-endian
-    uint32_t totalSizeBE = big::htobe32(totalSize);
-    uint32_t fileCountBE = big::htobe32(fileCount);
+    uint32_t totalSizeBE = bigx::htobe32(totalSize);
+    uint32_t fileCountBE = bigx::htobe32(fileCount);
 
     // Write header
     file.write("BIGF", 4);
@@ -71,8 +71,8 @@ protected:
       uint32_t size = static_cast<uint32_t>(fileContents[i].size());
 
       // Convert to big-endian
-      uint32_t offsetBE = big::htobe32(offset);
-      uint32_t sizeBE = big::htobe32(size);
+      uint32_t offsetBE = bigx::htobe32(offset);
+      uint32_t sizeBE = bigx::htobe32(size);
 
       // Write offset and size (big-endian)
       file.write(reinterpret_cast<const char *>(&offsetBE), 4);
@@ -99,7 +99,7 @@ TEST_F(ReaderTest, OpenValidArchive) {
   fs::path archivePath = createTestArchive("test.big");
 
   std::string error;
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
 
   ASSERT_TRUE(reader.has_value()) << "Failed to open archive: " << error;
   EXPECT_TRUE(reader->isOpen());
@@ -111,7 +111,7 @@ TEST_F(ReaderTest, FileListing) {
   fs::path archivePath = createTestArchive("test.big");
 
   std::string error;
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << error;
 
   const auto &files = reader->files();
@@ -128,7 +128,7 @@ TEST_F(ReaderTest, FileLookup) {
   fs::path archivePath = createTestArchive("test.big");
 
   std::string error;
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << error;
 
   // Test various case combinations
@@ -157,7 +157,7 @@ TEST_F(ReaderTest, FileView) {
   fs::path archivePath = createTestArchive("test.big");
 
   std::string error;
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << error;
 
   const auto *file = reader->findFile("test/file1.txt");
@@ -177,7 +177,7 @@ TEST_F(ReaderTest, ExtractToMemory) {
   fs::path archivePath = createTestArchive("test.big");
 
   std::string error;
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << error;
 
   const auto *file = reader->findFile("test/file2.dat");
@@ -196,7 +196,7 @@ TEST_F(ReaderTest, ExtractToDisk) {
   fs::path archivePath = createTestArchive("test.big");
 
   std::string error;
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << error;
 
   const auto *file = reader->findFile("test/file1.txt");
@@ -221,7 +221,7 @@ TEST_F(ReaderTest, InvalidArchive) {
   file.write("INVALID", 7);
 
   std::string error;
-  auto reader = big::Reader::open(invalidPath, &error);
+  auto reader = bigx::Reader::open(invalidPath, &error);
 
   EXPECT_FALSE(reader.has_value());
   EXPECT_FALSE(error.empty());
@@ -232,7 +232,7 @@ TEST_F(ReaderTest, NonExistentFile) {
   fs::path nonExistent = tempDir_ / "does_not_exist.big";
 
   std::string error;
-  auto reader = big::Reader::open(nonExistent, &error);
+  auto reader = bigx::Reader::open(nonExistent, &error);
 
   EXPECT_FALSE(reader.has_value());
   EXPECT_FALSE(error.empty());
@@ -243,12 +243,12 @@ TEST_F(ReaderTest, MoveConstruction) {
   fs::path archivePath = createTestArchive("test.big");
 
   std::string error;
-  auto reader1 = big::Reader::open(archivePath, &error);
+  auto reader1 = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader1.has_value()) << error;
 
   size_t fileCount = reader1->fileCount();
 
-  big::Reader reader2(std::move(*reader1));
+  bigx::Reader reader2(std::move(*reader1));
   EXPECT_EQ(reader2.fileCount(), fileCount);
 
   const auto *file = reader2.findFile("test/file1.txt");
@@ -260,7 +260,7 @@ TEST_F(ReaderTest, Close) {
   fs::path archivePath = createTestArchive("test.big");
 
   std::string error;
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << error;
 
   EXPECT_TRUE(reader->isOpen());

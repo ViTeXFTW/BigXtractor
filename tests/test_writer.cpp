@@ -36,7 +36,7 @@ TEST_F(WriterTest, CreateArchiveFromDisk) {
   createTestFile("file1.txt", "Hello, World!");
   createTestFile("file2.dat", "BinaryData");
 
-  big::Writer writer;
+  bigx::Writer writer;
   std::string error;
 
   ASSERT_TRUE(writer.addFile(tempDir_ / "file1.txt", "data/file1.txt", &error)) << error;
@@ -46,7 +46,7 @@ TEST_F(WriterTest, CreateArchiveFromDisk) {
   ASSERT_TRUE(writer.write(archivePath, &error)) << error;
 
   // Verify archive can be read
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << error;
 
   EXPECT_EQ(reader->fileCount(), 2);
@@ -65,7 +65,7 @@ TEST_F(WriterTest, CreateArchiveFromMemory) {
   std::vector<uint8_t> data1 = {'T', 'e', 's', 't', ' ', 'D', 'a', 't', 'a'};
   std::vector<uint8_t> data2 = {0, 1, 2, 3, 4};
 
-  big::Writer writer;
+  bigx::Writer writer;
   std::string error;
 
   ASSERT_TRUE(writer.addFile(data1, "test/file1.bin", &error)) << error;
@@ -75,7 +75,7 @@ TEST_F(WriterTest, CreateArchiveFromMemory) {
   ASSERT_TRUE(writer.write(archivePath, &error)) << error;
 
   // Verify archive can be read
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << error;
 
   EXPECT_EQ(reader->fileCount(), 2);
@@ -92,7 +92,7 @@ TEST_F(WriterTest, CreateArchiveFromMemory) {
 TEST_F(WriterTest, DuplicateFileDetection) {
   createTestFile("file1.txt", "Content");
 
-  big::Writer writer;
+  bigx::Writer writer;
   std::string error;
 
   ASSERT_TRUE(writer.addFile(tempDir_ / "file1.txt", "data/file.txt", &error)) << error;
@@ -107,7 +107,7 @@ TEST_F(WriterTest, DuplicateFileDetection) {
 
 // Test empty archive
 TEST_F(WriterTest, EmptyArchive) {
-  big::Writer writer;
+  bigx::Writer writer;
   std::string error;
 
   fs::path archivePath = tempDir_ / "empty.big";
@@ -124,13 +124,13 @@ TEST_F(WriterTest, EmptyArchive) {
   archiveFile.read(reinterpret_cast<char *>(&fileCount), 4);
   archiveFile.read(reinterpret_cast<char *>(&padding), 4);
 
-  EXPECT_EQ(big::betoh32(fileCount), 0u);
+  EXPECT_EQ(bigx::betoh32(fileCount), 0u);
   EXPECT_EQ(padding, 0u);
 }
 
 // Test non-existent source file
 TEST_F(WriterTest, NonExistentSourceFile) {
-  big::Writer writer;
+  bigx::Writer writer;
   std::string error;
 
   EXPECT_FALSE(writer.addFile(tempDir_ / "does_not_exist.txt", "data/file.txt", &error));
@@ -141,7 +141,7 @@ TEST_F(WriterTest, NonExistentSourceFile) {
 TEST_F(WriterTest, PathNormalization) {
   createTestFile("file1.txt", "Content");
 
-  big::Writer writer;
+  bigx::Writer writer;
   std::string error;
 
   // Add with backslashes
@@ -151,7 +151,7 @@ TEST_F(WriterTest, PathNormalization) {
   ASSERT_TRUE(writer.write(archivePath, &error)) << error;
 
   // Verify paths are normalized in the archive
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << error;
 
   const auto *file = reader->findFile("data/subdir/file.txt");
@@ -162,7 +162,7 @@ TEST_F(WriterTest, PathNormalization) {
 TEST_F(WriterTest, Clear) {
   createTestFile("file1.txt", "Content");
 
-  big::Writer writer;
+  bigx::Writer writer;
   std::string error;
 
   ASSERT_TRUE(writer.addFile(tempDir_ / "file1.txt", "data/file.txt", &error)) << error;
@@ -176,11 +176,11 @@ TEST_F(WriterTest, Clear) {
 TEST_F(WriterTest, MoveConstruction) {
   createTestFile("file1.txt", "Content");
 
-  big::Writer writer1;
+  bigx::Writer writer1;
   std::string error;
   ASSERT_TRUE(writer1.addFile(tempDir_ / "file1.txt", "data/file.txt", &error)) << error;
 
-  big::Writer writer2(std::move(writer1));
+  bigx::Writer writer2(std::move(writer1));
   EXPECT_EQ(writer2.fileCount(), 1);
 }
 
@@ -190,7 +190,7 @@ TEST_F(WriterTest, RoundTrip) {
   createTestFile("file1.txt", "Hello, World!");
   createTestFile("file2.txt", "Another file");
 
-  big::Writer writer;
+  bigx::Writer writer;
   std::string error;
 
   ASSERT_TRUE(writer.addFile(tempDir_ / "file1.txt", "original/file1.txt", &error)) << error;
@@ -200,7 +200,7 @@ TEST_F(WriterTest, RoundTrip) {
   ASSERT_TRUE(writer.write(archivePath, &error)) << error;
 
   // Read back
-  auto reader = big::Reader::open(archivePath, &error);
+  auto reader = bigx::Reader::open(archivePath, &error);
   ASSERT_TRUE(reader.has_value()) << error;
 
   // Extract and verify
@@ -232,7 +232,7 @@ TEST_F(WriterTest, RoundTrip) {
 TEST_F(WriterTest, ArchiveHeader) {
   createTestFile("file1.txt", "X");
 
-  big::Writer writer;
+  bigx::Writer writer;
   std::string error;
   ASSERT_TRUE(writer.addFile(tempDir_ / "file1.txt", "f.txt", &error)) << error;
 
@@ -251,5 +251,5 @@ TEST_F(WriterTest, ArchiveHeader) {
   archiveFile.read(reinterpret_cast<char *>(&padding), 4);
 
   EXPECT_EQ(padding, 0);
-  EXPECT_EQ(big::betoh32(fileCount), 1); // Convert from big-endian
+  EXPECT_EQ(bigx::betoh32(fileCount), 1); // Convert from big-endian
 }
