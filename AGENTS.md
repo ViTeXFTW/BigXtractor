@@ -18,7 +18,7 @@ cmake -B build/test -DBUILD_TESTING=ON
 cmake --build build/test
 
 # Run tests
-ctest --test-dir build
+ctest --test-dir build/test
 
 # Build with examples
 cmake -B build/examples -DBUILD_EXAMPLES=ON
