@@ -2,7 +2,6 @@
 
 #include <bit>
 #include <cstdint>
-#include <cstring>
 
 namespace bigx {
 
