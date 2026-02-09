@@ -1,4 +1,4 @@
-# Integrating big-lib as a Dependency
+# Integrating BigXtractor as a Dependency
 
 ## Option 1: Git Submodule (Recommended)
 
@@ -6,24 +6,24 @@
 
 ```bash
 cd /path/to/your/project
-git submodule add https://github.com/yourusername/big-lib.git external/big-lib
+git submodule add https://github.com/ViTeXFTW/BigXtractor.git external/BigXtractor
 git submodule update --init --recursive
 ```
 
 ### 2. Update your CMakeLists.txt
 
 ```cmake
-# Add the big-lib subdirectory
-add_subdirectory(external/big-lib)
+# Add the BigXtractor subdirectory
+add_subdirectory(external/BigXtractor)
 
 # Link against the library
-target_link_libraries(your_target PRIVATE big::big)
+target_link_libraries(your_target PRIVATE bigx::bigx)
 ```
 
 ### 3. Include headers in your code
 
 ```cpp
-#include <bigx/big.hpp>
+#include <bigx/bigx.hpp>
 
 // Or specific headers:
 // #include <bigx/archive.hpp>
@@ -39,25 +39,25 @@ target_link_libraries(your_target PRIVATE big::big)
 include(FetchContent)
 
 FetchContent_Declare(
-  big
-  GIT_REPOSITORY https://github.com/yourusername/big-lib.git
+  bigx
+  GIT_REPOSITORY https://github.com/ViTeXFTW/BigXtractor.git
   GIT_TAG main  # Or a specific version tag
 )
-FetchContent_MakeAvailable(big)
+FetchContent_MakeAvailable(bigx)
 
 # Link against the library
-target_link_libraries(your_target PRIVATE big::big)
+target_link_libraries(your_target PRIVATE bigx::bigx)
 ```
 
 ---
 
 ## Option 3: Installed System Library
 
-### Install big-lib
+### Install BigXtractor
 
 ```bash
-git clone https://github.com/yourusername/big-lib.git
-cd big-lib
+git clone https://github.com/ViTeXFTW/BigXtractor.git
+cd BigXtractor
 cmake -B build -DCMAKE_INSTALL_PREFIX=/usr/local -DINSTALL_STANDALONE=ON
 cmake --build build
 cmake --install build
@@ -66,8 +66,8 @@ cmake --install build
 ### Use in your project
 
 ```cmake
-find_package(big REQUIRED)
-target_link_libraries(your_target PRIVATE big::big)
+find_package(bigx REQUIRED)
+target_link_libraries(your_target PRIVATE bigx::bigx)
 ```
 
 ---
@@ -77,7 +77,7 @@ target_link_libraries(your_target PRIVATE big::big)
 ```
 your-project/
 ├── external/
-│   └── big-lib/       # ← Git submodule
+│   └── BigXtractor/       # ← Git submodule
 ├── src/
 │   └── main.cpp
 └── CMakeLists.txt
@@ -87,7 +87,7 @@ your-project/
 
 ## CMake Options
 
-When using big-lib as a submodule, you can control its behavior:
+When using BigXtractor as a submodule, you can control its behavior:
 
 ```cmake
 # Before add_subdirectory:
@@ -95,7 +95,7 @@ set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(INSTALL_STANDALONE OFF CACHE BOOL "" FORCE)
 
-add_subdirectory(external/big-lib)
+add_subdirectory(external/BigXtractor)
 ```
 
 Or via command line:
@@ -108,11 +108,11 @@ cmake -B build -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
 ## Usage Example
 
 ```cpp
-#include <bigx/big.hpp>
+#include <bigx/bigx.hpp>
 
 int main() {
     // Open an archive
-    auto archive = big::Archive::open("archive.big");
+    auto archive = bigx::Archive::open("archive.big");
     if (!archive) {
         std::cerr << "Failed to open archive\n";
         return 1;
@@ -137,8 +137,8 @@ int main() {
 
 ## Notes
 
-- The library exports the `big::big` target for proper dependency propagation
+- The library exports the `bigx::bigx` target for proper dependency propagation
 - Include directories are automatically configured
 - No manual include path configuration needed
 - Compiler flags from the parent project are not affected (uses `PRIVATE` where appropriate)
-- `compile_commands.json` symlink is only created when big-lib is the top-level project
+- `compile_commands.json` symlink is only created when bigx is the top-level project
