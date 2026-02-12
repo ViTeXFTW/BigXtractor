@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "bigx",
+  "version": "1.0.0",
+  "description": "Modern C++20 library for reading and writing BIG archive files (Command & Conquer Generals)",
+  "homepage": "https://github.com/ViTeXFTW/BigXtractor",
+  "license": "MIT",
+  "supports": "!uwp",
+  "features": {
+    "tests": {
+      "description": "Build test suite",
+      "dependencies": [
+        "gtest"
+      ]
+    }
+  }
+}

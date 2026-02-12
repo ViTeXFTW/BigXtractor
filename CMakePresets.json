@@ -12,6 +12,11 @@
             }
         },
         {
+            "name": "vcpkg",
+            "hidden": true,
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        },
+        {
             "name": "debug",
             "displayName": "Debug",
             "inherits": "base",
@@ -34,6 +39,31 @@
             "cacheVariables": {
                 "BUILD_TESTING": "ON"
             }
+        },
+        {
+            "name": "vcpkg-debug",
+            "displayName": "Debug (vcpkg)",
+            "inherits": ["base", "vcpkg"],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "vcpkg-release",
+            "displayName": "Release (vcpkg)",
+            "inherits": ["base", "vcpkg"],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "vcpkg-test",
+            "displayName": "Debug with Tests (vcpkg)",
+            "inherits": "vcpkg-debug",
+            "cacheVariables": {
+                "BUILD_TESTING": "ON",
+                "VCPKG_MANIFEST_FEATURES": "tests"
+            }
         }
     ],
     "buildPresets": [
@@ -48,12 +78,32 @@
         {
             "name": "test",
             "configurePreset": "test"
+        },
+        {
+            "name": "vcpkg-debug",
+            "configurePreset": "vcpkg-debug"
+        },
+        {
+            "name": "vcpkg-release",
+            "configurePreset": "vcpkg-release"
+        },
+        {
+            "name": "vcpkg-test",
+            "configurePreset": "vcpkg-test"
         }
     ],
     "testPresets": [
         {
             "name": "test",
             "configurePreset": "test",
+            "output": {
+                "outputOnFailure": true,
+                "verbosity": "verbose"
+            }
+        },
+        {
+            "name": "vcpkg-test",
+            "configurePreset": "vcpkg-test",
             "output": {
                 "outputOnFailure": true,
                 "verbosity": "verbose"

@@ -8,8 +8,8 @@ add_executable(mmap_tests test_mmap.cpp)
 target_link_libraries(mmap_tests
   PRIVATE
     bigx::bigx
-    gtest
-    gtest_main
+    GTest::gtest
+    GTest::gtest_main
 )
 target_compile_definitions(mmap_tests PRIVATE
   TEST_DATA_DIR="${TEST_DATA_DIR}"
@@ -28,8 +28,8 @@ add_executable(reader_tests test_reader.cpp)
 target_link_libraries(reader_tests
   PRIVATE
     bigx::bigx
-    gtest
-    gtest_main
+    GTest::gtest
+    GTest::gtest_main
 )
 target_compile_definitions(reader_tests PRIVATE
   TEST_DATA_DIR="${TEST_DATA_DIR}"
@@ -48,8 +48,8 @@ add_executable(writer_tests test_writer.cpp)
 target_link_libraries(writer_tests
   PRIVATE
     bigx::bigx
-    gtest
-    gtest_main
+    GTest::gtest
+    GTest::gtest_main
 )
 target_compile_definitions(writer_tests PRIVATE
   TEST_DATA_DIR="${TEST_DATA_DIR}"
@@ -71,8 +71,8 @@ add_executable(archive_tests
 target_link_libraries(archive_tests
   PRIVATE
     bigx::bigx
-    gtest
-    gtest_main
+    GTest::gtest
+    GTest::gtest_main
 )
 target_compile_definitions(archive_tests PRIVATE
   TEST_DATA_DIR="${TEST_DATA_DIR}"
