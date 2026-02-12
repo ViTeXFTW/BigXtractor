@@ -75,6 +75,17 @@ FetchContent_MakeAvailable(bigx)
 target_link_libraries(mytool PRIVATE bigx::bigx)
 ```
 
+### Option 4: vcpkg
+
+```bash
+vcpkg install bigx
+```
+
+```cmake
+find_package(bigx CONFIG REQUIRED)
+target_link_libraries(mytool PRIVATE bigx::bigx)
+```
+
 ## API Examples
 
 ### Reading an Archive

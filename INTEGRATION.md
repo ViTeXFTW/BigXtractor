@@ -72,6 +72,51 @@ target_link_libraries(your_target PRIVATE bigx::bigx)
 
 ---
 
+## Option 4: vcpkg
+
+### Using the Public Registry (Future)
+
+Once BigXtractor is published to the official vcpkg registry:
+
+```bash
+vcpkg install bigx
+```
+
+### Using an Overlay Port
+
+To use BigXtractor as an overlay port before it's in the registry:
+
+```bash
+# Clone BigXtractor
+git clone https://github.com/ViTeXFTW/BigXtractor.git
+
+# Build and install via overlay port
+vcpkg install bigx --overlay-ports=BigXtractor/ports
+```
+
+### Using with CMake Toolchain
+
+```bash
+# Configure with vcpkg toolchain
+cmake -B build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
+cmake --build build
+```
+
+Or use the provided CMake presets:
+
+```bash
+# Debug build with vcpkg
+cmake --preset vcpkg-debug
+cmake --build --preset vcpkg-debug
+
+# Debug with tests
+cmake --preset vcpkg-test
+cmake --build --preset vcpkg-test
+ctest --preset vcpkg-test
+```
+
+---
+
 ## Recommended Directory Structure
 
 ```
