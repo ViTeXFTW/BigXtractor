@@ -29,6 +29,10 @@ cmake --preset release
 cmake --build --preset release
 cmake --preset test  # Debug + BUILD_TESTING=ON
 ctest --preset test
+
+# Using vcpkg for dependencies (requires VCPKG_ROOT env var)
+cmake --preset vcpkg-test  # Builds with vcpkg-provided GTest
+ctest --preset vcpkg-test
 ```
 
 ## Architecture
