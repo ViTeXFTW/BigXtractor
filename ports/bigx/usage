@@ -1,0 +1,4 @@
+bigx provides CMake targets:
+
+    find_package(bigx CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE bigx::bigx)
